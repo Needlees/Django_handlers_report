@@ -1,25 +1,25 @@
 import sys, re
-from typing import Union, List, Tuple, Final
+from typing import Union, Final, Optional
 
 from handlers_report import handlers_report
 
-REPORTS: Final[List[str]] = ['handlers']
+REPORTS: Final[list[str]] = ['handlers']
 
 
-def parse_args() -> Tuple[List[str], str]:
-    logs: List[str] = []
-    report: str = ''
-    match_str: List[Tuple[str, str, str]] = re.findall(r"(.*)--report\s(\w+)(.*)", ' '.join(sys.argv[1:]))
+def parse_args() -> tuple[list[str], str | None]:
+    logs: list[str] = []
+    report: Optional[str] = None
+    match_str: list[tuple[str, str, str]] = re.findall(r"(.*)--report\s(\w+)(.*)", ' '.join(sys.argv[1:]))
 
     if match_str:
         report = match_str[0][1]
-        logs_str: str = match_str[0][0] if match_str[0][0] else match_str[0][2]
+        logs_str: str = match_str[0][0] or match_str[0][2]
         logs = logs_str.strip().split()
 
     return logs, report
 
 
-def check_files(files: List[str]) -> bool:
+def check_files(files: list[str]) -> bool:
     for f in files:
         try:
             with open(f, encoding='utf-8'):
@@ -29,10 +29,10 @@ def check_files(files: List[str]) -> bool:
     return True
 
 
-def print_report(table: List[List[Union[str, int]]], total_caption: str) -> None:
+def print_report(table: list[list[Union[str, int]]], total_caption: str) -> None:
     # Вычисление итогов
-    total_col: List[int] = [sum(i for i in row if isinstance(i, int)) for row in table[1:]]
-    total_row: List[int] = [
+    total_col: list[int] = [sum(i for i in row if isinstance(i, int)) for row in table[1:]]
+    total_row: list[int] = [
         sum(table[j][i] if isinstance(table[j][i], int) else 0 for j in range(1, len(table)))  # type: ignore[misc]
         for i in range(1, len(table[1]))
     ]
@@ -45,7 +45,7 @@ def print_report(table: List[List[Union[str, int]]], total_caption: str) -> None
     table.append(['', *total_row, total_all])
 
     # Вычисление ширины столбцов
-    col_widths: List[int] = [
+    col_widths: list[int] = [
         max(len(str(row[i])) for row in table)
         for i in range(len(table[0]))
     ]
