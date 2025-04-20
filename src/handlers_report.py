@@ -3,7 +3,7 @@ from typing import Union, Final
 
 LVL: Final[list[str]] = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
 
-def process_log(log: str) -> dict[str, dict[str, int]]:
+def log_processing(log: str) -> dict[str, dict[str, int]]:
     dct: dict[str, dict[str, int]] = {}
     try:
         with (open(log, encoding='utf-8') as file):
@@ -23,7 +23,7 @@ def process_log(log: str) -> dict[str, dict[str, int]]:
 def handlers_report(file_logs: list[str]) -> tuple[list[list[Union[str, int]]], str]:
     report_dict: dict[str, dict[str, int]] = {}
     for log in file_logs:
-        current_dict = process_log(log)
+        current_dict = log_processing(log)
 
         # Объединение словарей с суммированием значений
         union_dict = {**report_dict, **current_dict}

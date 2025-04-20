@@ -1,9 +1,11 @@
 import sys, re
-from typing import Union, Final, Optional
+from typing import Union, Final, Optional, Any
 
 from handlers_report import handlers_report
 
-REPORTS: Final[list[str]] = ['handlers']
+REPORTS: Final[dict[str, Any]] = {
+    'handlers': handlers_report
+}
 
 
 def parse_args() -> tuple[list[str], str | None]:
@@ -19,14 +21,16 @@ def parse_args() -> tuple[list[str], str | None]:
     return logs, report
 
 
-def check_files(files: list[str]) -> bool:
+def check_files(files: list[str]) -> None:
+    if not files:
+        raise FileNotFoundError("Something went wrong! Files not specified.")
+
     for f in files:
         try:
             with open(f, encoding='utf-8'):
                 pass
         except FileNotFoundError:
-            return False
-    return True
+            raise FileNotFoundError("One or more files do not exist.")
 
 
 def print_report(table: list[list[Union[str, int]]], total_caption: str) -> None:
@@ -61,22 +65,16 @@ def print_report(table: list[list[Union[str, int]]], total_caption: str) -> None
         print()
 
 
-def main() -> None:
+def report_generation() -> None:
     file_logs, report_name = parse_args()
 
-    if not report_name or report_name not in REPORTS:
-        print("Something went wrong! Report or report name not specified.")
-        return
-    if not file_logs:
-        print("Something went wrong! Files not specified.")
-        return
-    if not check_files(file_logs):
-        print("One or more files not exist")
+    if report_name is None or report_name not in REPORTS:
+        print("Something went wrong! No report or report name specified.")
         return
 
-    if report_name == 'handlers':
-        print_report(*handlers_report(file_logs))
+    check_files(file_logs)
+    print_report(*REPORTS[report_name](file_logs))
 
 
 if __name__ == '__main__':
-    main()
+    report_generation()
