@@ -15,7 +15,7 @@ python3 main.py logs/app1.log logs/app2.log logs/app3.log --report handlers
 <p>Для добавления нового отчета необходимо импортировать модуль с отчетом в <code>main.py</code><br>
 и добавить его наименование и функцию по формированию в нижеприведенный словарь:</p>
 <pre>
-REPORTS: Final[dict[str, Any]] = {
+REPORTS: Final[dict[str, Callable[[list[str]], tuple[list[list[Union[str, int]]], str]]]] = {
     'handlers': handlers_report
 }
 </pre>

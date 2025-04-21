@@ -1,9 +1,9 @@
 import sys, re
-from typing import Union, Final, Optional, Any
+from typing import Union, Final, Optional, Any, Callable
 
 from handlers_report import handlers_report
 
-REPORTS: Final[dict[str, Any]] = {
+REPORTS: Final[dict[str, Callable[[list[str]], tuple[list[list[Union[str, int]]], str]]]] = {
     'handlers': handlers_report
 }
 
