@@ -1,4 +1,4 @@
-<h5>Устаревшая версия, новая тут: <a href="https://github.com/Needlees/Django_handlers_report2">Django_handlers_report2</a></h5>
+<h3>Устаревшая версия, новая здесь: <a href="https://github.com/Needlees/Django_handlers_report2">Django_handlers_report2</a></h3>
 <p><b>CLI-приложение для анализа логов Django.</b> <br>Формирует отчет и выводит его в консоль.</p>
 <p>python3 main.py [file lists] [--report report name]</p>
 <p>Опции:</p>
